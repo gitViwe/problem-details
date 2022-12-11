@@ -1,2 +1,3 @@
-# problem-details
-Problem Details for HTTP APIs
+# Problem Details for HTTP APIs
+For communicating the errors and exceptions to our API clients, we should specify a response format. In some cases, we would also like to let our users know what actually happened when something went wrong, instead of just telling them it was a 404 or 500 error.
+If multiple clients consume our API, or if we need to use a selection of someone else’s APIs, it saves a lot of headaches to have this communication standardized.
