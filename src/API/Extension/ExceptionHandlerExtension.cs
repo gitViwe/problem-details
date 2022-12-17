@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace API.Extension;
 
-public static class ExceptionHandlerApplicationBuilderExtension
+public static class ExceptionHandlerExtension
 {
     internal static void UseHubExceptionHandler(this IApplicationBuilder app, ILogger logger)
     {

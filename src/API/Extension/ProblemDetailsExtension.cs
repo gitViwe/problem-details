@@ -2,7 +2,7 @@
 
 namespace API.Extension;
 
-public static class ProblemDetailsServiceCollectionExtension
+public static class ProblemDetailsExtension
 {
     public static IServiceCollection AddCustomProblemDetails(this IServiceCollection services)
     {
