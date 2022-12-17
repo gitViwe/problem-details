@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+
+  problem-detail.api:
+    image: hubviwe/problem-detail.api:1.0.0
+    container_name: problem-detail.api
+    build:
+        context: src/
+        dockerfile: API/Dockerfile
+    environment:
+        ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - 5299:80
+      - 7298:443
