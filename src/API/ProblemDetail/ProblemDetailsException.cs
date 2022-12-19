@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -10,7 +9,7 @@ public class ProblemDetailsException : ProblemDetails
     public ProblemDetailsException(HttpContext context, ProblemDetails problemDetails)
     {
         SetProblemDefaults(problemDetails);
-        TraceId = Activity.Current?.Id ?? context.TraceIdentifier;
+        TraceId = context.TraceIdentifier;
     }
 
     [JsonPropertyName("traceId")]

@@ -36,7 +36,7 @@ public class ProblemDetailsFactory : Microsoft.AspNetCore.Mvc.Infrastructure.Pro
         context.Response.ContentType = CONTENT_TYPE;
 
         var result = StatusCodeProblemDetails.Create(status);
-        SetProblemDefaults(result, status, title, type, detail, instance);
+        SetProblemDefaults(result, status, title, type, detail, instance: instance ?? context.Request.Path);
         return result;
     }
 

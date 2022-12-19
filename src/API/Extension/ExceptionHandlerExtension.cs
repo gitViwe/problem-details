@@ -15,7 +15,7 @@ public static class ExceptionHandlerExtension
                 int statusCode = StatusCodes.Status500InternalServerError;
                 string contentType = "application/problem+json";
                 ProblemDetailsFactory problemDetailsFactory = new();
-                string response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetailsException(context, statusCode));
+                string response = string.Empty;
 
                 // attempt to get exception details
                 var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
@@ -34,6 +34,10 @@ public static class ExceptionHandlerExtension
                         statusCode = StatusCodes.Status400BadRequest;
                         response = JsonSerializer.Serialize(problemDetailsFactory.CreateValidationProblemDetails(context, statusCode, validationException.ToDictionary()));
                     }
+                }
+                else
+                {
+                    response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetailsException(context, statusCode));
                 }
 
                 context.Response.StatusCode = statusCode;
