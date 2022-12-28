@@ -6,7 +6,7 @@ namespace API.Extension;
 
 public static class ExceptionHandlerExtension
 {
-    internal static void UseHubExceptionHandler(this IApplicationBuilder app, ILogger logger)
+    internal static void UseHubExceptionHandler(this IApplicationBuilder app, ILogger logger, IServiceProvider serviceProvider)
     {
         app.UseExceptionHandler(options =>
         {
@@ -14,7 +14,7 @@ public static class ExceptionHandlerExtension
             {
                 int statusCode = StatusCodes.Status500InternalServerError;
                 string contentType = "application/problem+json";
-                ProblemDetailsFactory problemDetailsFactory = new();
+                ProblemDetailsFactory problemDetailsFactory = serviceProvider.GetRequiredService<ProblemDetailsFactory>();
                 string response = string.Empty;
 
                 // attempt to get exception details

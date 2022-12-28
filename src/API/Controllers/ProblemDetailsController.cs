@@ -44,12 +44,10 @@ public class ProblemDetailsController : ControllerBase
         throw new HubValidationException(result.Errors);
     }
 
-    [HttpGet("detail")]
-    public IActionResult Detail([FromServices] ProblemDetailsFactory problemDetailsFactory)
+    [HttpGet("detail/{detail}")]
+    public IActionResult Detail([FromRoute] string detail)
     {
-        var problem = problemDetailsFactory
-            .CreateProblemDetails(HttpContext, StatusCodes.Status412PreconditionFailed, detail: "This will end up in the 'detail' field.");
-        return BadRequest(problem);
+        return Problem(detail: detail, statusCode: StatusCodes.Status412PreconditionFailed);
     }
 
     [HttpGet("custom-problem")]
