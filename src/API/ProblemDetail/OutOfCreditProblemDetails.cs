@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace API.ProblemDetail;
 
-namespace API.ProblemDetail;
-
-public class OutOfCreditProblemDetails : ProblemDetails
+public class OutOfCreditProblemDetails
 {
-    public OutOfCreditProblemDetails()
-    {
-        Accounts = new List<string>();
-    }
-
     public decimal Balance { get; set; }
 
-    public ICollection<string> Accounts { get; }
+    public ICollection<string> Accounts { get; } = new List<string>();
 }

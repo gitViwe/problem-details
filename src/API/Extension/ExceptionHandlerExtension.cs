@@ -1,4 +1,5 @@
 ﻿using API.Exception;
+using gitViwe.ProblemDetail;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
 
@@ -14,8 +15,8 @@ public static class ExceptionHandlerExtension
             {
                 int statusCode = StatusCodes.Status500InternalServerError;
                 string contentType = "application/problem+json";
-                ProblemDetailsFactory problemDetailsFactory = serviceProvider.GetRequiredService<ProblemDetailsFactory>();
-                string response = string.Empty;
+                var problemDetailsFactory = serviceProvider.GetRequiredService<IProblemDetailFactory>();
+                string response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetails(context, statusCode));
 
                 // attempt to get exception details
                 var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
@@ -27,17 +28,13 @@ public static class ExceptionHandlerExtension
                     if (exceptionFeature.Error is NotImplementedException)
                     {
                         statusCode = StatusCodes.Status501NotImplemented;
-                        response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetailsException(context, statusCode, exceptionFeature.Error.Message));
+                        response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetails(context, statusCode, exceptionFeature.Error.Message));
                     }
                     else if (exceptionFeature.Error is HubValidationException validationException)
                     {
                         statusCode = StatusCodes.Status400BadRequest;
                         response = JsonSerializer.Serialize(problemDetailsFactory.CreateValidationProblemDetails(context, statusCode, validationException.ToDictionary()));
                     }
-                }
-                else
-                {
-                    response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetailsException(context, statusCode));
                 }
 
                 context.Response.StatusCode = statusCode;

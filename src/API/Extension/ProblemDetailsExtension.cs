@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using gitViwe.ProblemDetail;
 
 namespace API.Extension;
 
@@ -6,7 +6,7 @@ public static class ProblemDetailsExtension
 {
     public static IServiceCollection AddCustomProblemDetails(this IServiceCollection services)
     {
-        services.TryAddSingleton<ProblemDetailsFactory>();
+        services.AddGitViweProblemDetailFactory();
 
         services.AddProblemDetails(options =>
         {
