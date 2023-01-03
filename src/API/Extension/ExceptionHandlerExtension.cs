@@ -1,6 +1,6 @@
 ﻿using API.Exception;
-using gitViwe.ProblemDetail;
 using Microsoft.AspNetCore.Diagnostics;
+using Shared;
 using System.Text.Json;
 
 namespace API.Extension;

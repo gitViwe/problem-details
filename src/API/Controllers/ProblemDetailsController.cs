@@ -1,7 +1,7 @@
 ﻿using API.Exception;
 using API.Model;
-using gitViwe.ProblemDetail;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using System.Net.Mime;
 
 namespace API.Controllers;
@@ -65,7 +65,7 @@ public class ProblemDetailsController : ControllerBase
                         context: HttpContext,
                         statusCode: StatusCodes.Status412PreconditionFailed,
                         extensions: new Dictionary<string, object?>()
-                        { 
+                        {
                             { extensionKey, extensionValue }
                         },
                         detail: "Your current balance is 30, but that costs 50.");

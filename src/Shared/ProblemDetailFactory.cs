@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Diagnostics;
 
 namespace Shared;
 
@@ -11,13 +12,13 @@ public class ProblemDetailFactory : Microsoft.AspNetCore.Mvc.Infrastructure.Prob
     public DefaultProblemDetails CreateProblemDetails(HttpContext context, int statusCode, string? detail = null)
     {
         var problemDetails = CreateProblemDetails(context, statusCode, title: null, type: null, detail, instance: context.Request.Path);
-        return new DefaultProblemDetails(context.TraceIdentifier, problemDetails);
+        return new DefaultProblemDetails(Activity.Current?.Id ?? context.TraceIdentifier, problemDetails);
     }
 
     public DefaultProblemDetails CreateProblemDetails(HttpContext context, int statusCode, IDictionary<string, object?> extensions, string? detail = null)
     {
         var problemDetails = CreateProblemDetails(context, statusCode, title: null, type: null, detail, instance: context.Request.Path);
-        return new DefaultProblemDetails(context.TraceIdentifier, problemDetails, extensions);
+        return new DefaultProblemDetails(Activity.Current?.Id ?? context.TraceIdentifier, problemDetails, extensions);
     }
 
     public ValidationProblemDetails CreateValidationProblemDetails(HttpContext context, int statusCode, IDictionary<string, string[]> errors, string? detail = null)
