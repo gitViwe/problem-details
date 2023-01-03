@@ -6,6 +6,6 @@ If multiple clients consume our API, or if we need to use a selection of someone
 
 Get up and running quickly with docker
 ```
-docker run -d -p 5299:80 --env ASPNETCORE_ENVIRONMENT=Development hubviwe/problem-detail.api:1.0.0
+docker run -d -p 5299:80 --env ASPNETCORE_ENVIRONMENT=Development hubviwe/problem-detail.api:1.0.1
 ```
-Then navigate to `http://localhost:5299/swagger`
+Then navigate to [http://localhost:5299/swagger](http://localhost:5299/swagger)
