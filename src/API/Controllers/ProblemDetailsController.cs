@@ -1,6 +1,5 @@
 ﻿using API.Exception;
 using API.Model;
-using API.ProblemDetail;
 using gitViwe.ProblemDetail;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;

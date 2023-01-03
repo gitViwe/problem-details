@@ -1,4 +1,4 @@
-﻿namespace API.ProblemDetail;
+﻿namespace API.Model;
 
 public class OutOfCreditProblemDetails
 {
