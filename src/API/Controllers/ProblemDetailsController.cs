@@ -1,7 +1,7 @@
 ﻿using API.Exception;
 using API.Model;
-using API.ProblemDetail;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 using System.Net.Mime;
 
 namespace API.Controllers;
@@ -47,22 +47,29 @@ public class ProblemDetailsController : ControllerBase
     [HttpGet("detail/{detail}")]
     public IActionResult Detail([FromRoute] string detail)
     {
-        return Problem(detail: detail, statusCode: StatusCodes.Status412PreconditionFailed);
+        return Problem(detail: detail, statusCode: StatusCodes.Status400BadRequest);
     }
 
     [HttpGet("custom-problem")]
-    public IActionResult Result()
+    public IActionResult Result([FromServices] IProblemDetailFactory problemDetailFactory)
     {
-        var problem = new OutOfCreditProblemDetails
+        var extensionValue = new OutOfCreditProblemDetails
         {
-            Type = "https://example.com/probs/out-of-credit",
-            Title = "You do not have enough credit.",
-            Detail = "Your current balance is 30, but that costs 50.",
-            Instance = "/account/12345/msgs/abc",
             Balance = 30.0m,
             Accounts = { "/account/12345", "/account/67890" }
         };
 
-        return BadRequest(problem);
+        var extensionKey = char.ToLowerInvariant(nameof(OutOfCreditProblemDetails)[0]) + nameof(OutOfCreditProblemDetails)[1..];
+
+        var problem = problemDetailFactory.CreateProblemDetails(
+                        context: HttpContext,
+                        statusCode: StatusCodes.Status412PreconditionFailed,
+                        extensions: new Dictionary<string, object?>()
+                        {
+                            { extensionKey, extensionValue }
+                        },
+                        detail: "Your current balance is 30, but that costs 50.");
+
+        return StatusCode(problem.Status!.Value, problem);
     }
 }
