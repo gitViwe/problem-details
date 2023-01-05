@@ -29,10 +29,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          # Specify the NuGet source to restore packages from
-          source-url: https://api.nuget.org/v3/index.json
-          dotnet-version: |
-            7.0.x
+          dotnet-version: 7.0.x
           
       - name: .NET Restore
         run: dotnet restore problem-detail
