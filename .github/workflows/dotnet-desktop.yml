@@ -32,7 +32,7 @@ jobs:
           dotnet-version: 7.0.x
           
       - name: .NET Restore
-        run: dotnet restore problem-detail
+        run: dotnet restore src
       
       - name: .NET Build
-        run: dotnet build problem-detail --configuration Release
+        run: dotnet build src --configuration Release
