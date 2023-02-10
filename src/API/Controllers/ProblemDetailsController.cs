@@ -50,25 +50,16 @@ public class ProblemDetailsController : ControllerBase
         return Problem(detail: detail, statusCode: StatusCodes.Status400BadRequest);
     }
 
-    [HttpGet("custom-problem")]
-    public IActionResult Result([FromServices] IProblemDetailFactory problemDetailFactory)
+    [HttpPost("custom-problem")]
+    public IActionResult Result([FromBody] OutOfCreditProblemDetailsInput input)
     {
-        var extensionValue = new OutOfCreditProblemDetails
-        {
-            Balance = 30.0m,
-            Accounts = { "/account/12345", "/account/67890" }
-        };
+        var outOfCredit = new OutOfCreditProblemDetails(input.UserBalance, input.UserAccounts, input.ItemCost);
 
-        var extensionKey = char.ToLowerInvariant(nameof(OutOfCreditProblemDetails)[0]) + nameof(OutOfCreditProblemDetails)[1..];
-
-        var problem = problemDetailFactory.CreateProblemDetails(
+        var problem = ProblemDetailFactory.CreateProblemDetails(
                         context: HttpContext,
-                        statusCode: StatusCodes.Status412PreconditionFailed,
-                        extensions: new Dictionary<string, object?>()
-                        {
-                            { extensionKey, extensionValue }
-                        },
-                        detail: "Your current balance is 30, but that costs 50.");
+                        statusCode: outOfCredit.ToStatus(),
+                        extensions: outOfCredit.ToExtension(),
+                        detail: outOfCredit.ToDetail());
 
         return StatusCode(problem.Status!.Value, problem);
     }

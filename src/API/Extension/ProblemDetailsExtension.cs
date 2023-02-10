@@ -6,8 +6,6 @@ public static class ProblemDetailsExtension
 {
     public static IServiceCollection AddCustomProblemDetails(this IServiceCollection services)
     {
-        services.AddCustomProblemDetailFactory();
-
         services.AddProblemDetails(options =>
         {
             options.CustomizeProblemDetails = context =>

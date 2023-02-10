@@ -7,38 +7,40 @@ namespace API.Extension;
 
 public static class ExceptionHandlerExtension
 {
-    internal static void UseHubExceptionHandler(this IApplicationBuilder app, ILogger logger, IServiceProvider serviceProvider)
+    internal static void UseHubExceptionHandler(this IApplicationBuilder app, ILogger logger)
     {
         app.UseExceptionHandler(options =>
         {
             options.Run(async context =>
             {
-                int statusCode = StatusCodes.Status500InternalServerError;
-                string contentType = "application/problem+json";
-                var problemDetailsFactory = serviceProvider.GetRequiredService<IProblemDetailFactory>();
-                string response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetails(context, statusCode));
-
-                // attempt to get exception details
                 var exceptionFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+                string response = JsonSerializer.Serialize(ProblemDetailFactory.CreateProblemDetails(context, StatusCodes.Status500InternalServerError));
+
                 if (exceptionFeature is not null)
                 {
                     // log error message
                     logger.LogError(exceptionFeature.Error, exceptionFeature.Error.Message);
 
-                    if (exceptionFeature.Error is NotImplementedException)
+                    if (exceptionFeature.Error is NotImplementedException notImplemented)
                     {
-                        statusCode = StatusCodes.Status501NotImplemented;
-                        response = JsonSerializer.Serialize(problemDetailsFactory.CreateProblemDetails(context, statusCode, exceptionFeature.Error.Message));
+                        response = JsonSerializer.Serialize(ProblemDetailFactory.CreateProblemDetails(context, StatusCodes.Status501NotImplemented, exceptionFeature.Error.Message));
+                        logger.LogWarning(notImplemented, "The request handler is not fully implemented. Problem detail: {response}", response);
                     }
-                    else if (exceptionFeature.Error is HubValidationException validationException)
+                    else if (exceptionFeature.Error is HubValidationException validation)
                     {
-                        statusCode = StatusCodes.Status400BadRequest;
-                        response = JsonSerializer.Serialize(problemDetailsFactory.CreateValidationProblemDetails(context, statusCode, validationException.ToDictionary()));
+                        response = JsonSerializer.Serialize(ProblemDetailFactory.CreateValidationProblemDetails(context, StatusCodes.Status400BadRequest, validation.ToDictionary()));
+                        logger.LogTrace(validation, "A validation exception occurred. Problem detail: {response}", response);
+                    }
+                    else
+                    {
+                        logger.LogError(exceptionFeature.Error, "A unhandled exception occurred. Problem detail: {response}", response);
                     }
                 }
+                else
+                {
+                    logger.LogError( "A unhandled exception occurred. Problem detail: {response}", response);
+                }
 
-                context.Response.StatusCode = statusCode;
-                context.Response.ContentType = contentType;
                 await context.Response.WriteAsync(response);
                 await context.Response.CompleteAsync();
             });

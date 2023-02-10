@@ -31,7 +31,7 @@ Things you need to use the software and how to install them.
    ```
 2. Run via Docker hub
    ```
-   docker run -d -p 5299:80 --env ASPNETCORE_ENVIRONMENT=Development hubviwe/problem-detail.api:1.0.1
+   docker run -d -p 5299:80 --env ASPNETCORE_ENVIRONMENT=Development hubviwe/problem-detail.api:1.0.2
    ```
 3. Build and run the API
    ```

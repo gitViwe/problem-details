@@ -24,7 +24,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseHubExceptionHandler(app.Logger, app.Services);
+app.UseHubExceptionHandler(app.Logger);
 
 app.Run();
 
