@@ -21,7 +21,7 @@ public class ProblemDetailsController : ControllerBase
     {
         if (isHandled)
         {
-            throw new NotImplementedException("This is an exception thrown from an API controller.");
+            throw new NotImplementedException("This is an exception description that is shared with the calling... expected and handled accordingly.");
         }
 
         throw new System.Exception("This is an exception thrown from an API controller.");
@@ -44,13 +44,13 @@ public class ProblemDetailsController : ControllerBase
         throw new HubValidationException(result.Errors);
     }
 
-    [HttpGet("detail/{detail}")]
-    public IActionResult Detail([FromRoute] string detail)
+    [HttpGet("detail")]
+    public IActionResult Detail([FromQuery] string detail, [FromQuery] int statusCode)
     {
-        return Problem(detail: detail, statusCode: StatusCodes.Status400BadRequest);
+        return Problem(detail: detail, statusCode: statusCode);
     }
 
-    [HttpPost("custom-problem")]
+    [HttpPost("with-extension")]
     public IActionResult Result([FromBody] OutOfCreditProblemDetailsInput input)
     {
         var outOfCredit = new OutOfCreditProblemDetails(input.UserBalance, input.UserAccounts, input.ItemCost);

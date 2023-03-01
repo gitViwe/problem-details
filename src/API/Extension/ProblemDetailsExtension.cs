@@ -1,6 +1,4 @@
-﻿using Shared;
-
-namespace API.Extension;
+﻿namespace API.Extension;
 
 public static class ProblemDetailsExtension
 {

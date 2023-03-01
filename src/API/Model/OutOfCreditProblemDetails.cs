@@ -14,7 +14,7 @@ public class OutOfCreditProblemDetails
 
     public int Balance { get; }
     public IEnumerable<string> Accounts { get; }
-    public Dictionary<string, object?> ToExtension() => new Dictionary<string, object?>() { { nameof(OutOfCreditProblemDetails), this } };
+    public Dictionary<string, object?> ToExtension() => new() { { "outOfCreditProblemDetails", this } };
     public string ToDetail() => $"Your current balance is {Balance}, but that costs {_itemCost}.";
     public int ToStatus() => 412; // Status412PreconditionFailed
 }
